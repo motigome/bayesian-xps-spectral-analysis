@@ -1,0 +1,39 @@
+[project]
+name = "bayesian-xps-spectral-analysis"
+version = "0.1.0"
+description = "Reproducible Bayesian linear-regression and XPS peak-decomposition tutorials using exchange Monte Carlo."
+requires-python = ">=3.10"
+readme = "README.md"
+dependencies = []
+
+[project.optional-dependencies]
+plot = [
+    "matplotlib>=3.8,<4",
+    "numpy>=1.26,<3",
+    "corner>=2.2,<3",
+]
+tutorial = [
+    "corner>=2.2,<3",
+    "jupyterlab>=4.2,<5",
+    "jupytext>=1.16,<2",
+    "matplotlib>=3.8,<4",
+    "nbconvert>=7.16,<8",
+    "numpy>=1.26,<3",
+]
+test = [
+    "pytest>=8,<10",
+]
+
+[project.scripts]
+bayes-emc = "bayes_emc.cli:main"
+
+[build-system]
+requires = ["setuptools>=61"]
+build-backend = "setuptools.build_meta"
+
+[tool.setuptools.packages.find]
+include = ["bayes_emc*"]
+exclude = ["cpp*", "tests*", "tutorials*"]
+
+[tool.setuptools.data-files]
+"share/bayesian-xps-spectral-analysis/cpp/include/bayes_emc" = ["cpp/include/bayes_emc/*.hpp"]

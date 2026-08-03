@@ -1,0 +1,92 @@
+{
+    "project": {
+        "name": "xps_spectral_decomposition",
+        "model": "gaussian_peaks",
+        "result_dir": "result"
+    },
+    "data": {
+        "path": "data/synthetic_xps.csv",
+        "format": "csv",
+        "header": true,
+        "input_columns": [
+            "E"
+        ],
+        "output_columns": [
+            "y"
+        ],
+        "input_dim": 1,
+        "output_dim": 1
+    },
+    "emc": {
+        "replica_num": 16,
+        "gamma": 2.200000866667,
+        "sample_num": 10000,
+        "burnin_num": 10000,
+        "sample_stride": 1,
+        "exchange_stride": 1,
+        "parallel_workers": 0,
+        "likelihood_workers": 1,
+        "likelihood_parallel_min_rows": 2048,
+        "progress": false,
+        "progress_interval_steps": 0,
+        "progress_bar_width": 32,
+        "seed": 20260804
+    },
+    "model": {
+        "models": [
+            {
+                "name": "gaussian_peaks",
+                "basis_count": 3,
+                "parameters": [
+                    {
+                        "name": "A",
+                        "prior": {
+                            "type": "uniform",
+                            "min": 0.0,
+                            "max": 2.0
+                        },
+                        "C": 0.1316872427983539,
+                        "d": 0.0
+                    },
+                    {
+                        "name": "mu",
+                        "prior": {
+                            "type": "uniform",
+                            "min": 0.8,
+                            "max": 2.1
+                        },
+                        "C": 0.08559670781893004,
+                        "d": 0.25
+                    },
+                    {
+                        "name": "w",
+                        "prior": {
+                            "type": "uniform",
+                            "min": 0.03,
+                            "max": 0.2
+                        },
+                        "C": 0.03777777777777778,
+                        "d": 0.25
+                    }
+                ]
+            }
+        ],
+        "noise": {
+            "type": "gaussian",
+            "sigma2_min": 0.01,
+            "estimate_sigma2": false
+        }
+    },
+    "build": {
+        "compiler": "c++",
+        "include_dirs": [],
+        "library_dirs": [],
+        "flags": [
+            "-std=c++20",
+            "-O2",
+            "-pthread"
+        ],
+        "libs": [],
+        "output": "v2_main.out"
+    }
+}
