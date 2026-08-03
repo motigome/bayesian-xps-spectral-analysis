@@ -1,0 +1,76 @@
+{
+  "project": {
+    "name": "bayesian_linear_model_tutorial",
+    "model": "linear",
+    "result_dir": "result"
+  },
+  "data": {
+    "path": "data/data.csv",
+    "format": "csv",
+    "header": true,
+    "input_columns": ["x"],
+    "output_columns": ["y"],
+    "input_dim": 1,
+    "output_dim": 1
+  },
+  "emc": {
+    "_comment": "beta[0]=0 and beta[i]=gamma^(i+1-replica_num). The resulting sigma2 candidates are sigma2_min/beta[i].",
+    "replica_num": 20,
+    "gamma": 1.6,
+    "sample_num": 5000,
+    "burnin_num": 5000,
+    "sample_stride": 1,
+    "exchange_stride": 1,
+    "parallel_workers": 0,
+    "likelihood_workers": 1,
+    "likelihood_parallel_min_rows": 2048,
+    "progress": true,
+    "progress_interval_steps": 0,
+    "progress_bar_width": 32,
+    "seed": 24680
+  },
+  "model": {
+    "models": [
+      {
+        "name": "linear",
+        "basis_count": 1,
+        "parameters": [
+          {
+            "name": "a",
+            "prior": {
+              "type": "uniform",
+              "lower": -1.0,
+              "upper": 1.0
+            },
+            "C": 0.2,
+            "d": 0.5
+          },
+          {
+            "name": "b",
+            "prior": {
+              "type": "uniform",
+              "lower": -1.0,
+              "upper": 1.0
+            },
+            "C": 0.2,
+            "d": 0.5
+          }
+        ]
+      }
+    ],
+    "noise": {
+      "_comment": "The lower-bound variance is below the synthetic truth 0.01; estimate_sigma2 compares the finite ladder candidates by free energy.",
+      "type": "gaussian",
+      "sigma2_min": 0.0025,
+      "estimate_sigma2": true
+    }
+  },
+  "build": {
+    "compiler": "c++",
+    "include_dirs": [],
+    "library_dirs": [],
+    "flags": ["-std=c++20", "-O2", "-pthread"],
+    "libs": [],
+    "output": "linear_model.out"
+  }
+}
