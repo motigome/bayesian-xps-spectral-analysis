@@ -162,21 +162,22 @@ def spectrum(E, peaks):
     return sum(gaussian_peak(E, **peak) for peak in peaks)
 
 
-energy = np.linspace(0.0, 3.0, N)
+energy = np.array([float(f"{value:.12g}") for value in np.linspace(0.0, 3.0, N)])
 true_components = np.vstack([gaussian_peak(energy, **peak) for peak in TRUE_PEAKS])
 true_signal = true_components.sum(axis=0)
 # Python標準ライブラリの固定seedを使い、Notebookと検証スクリプトで同じ人工データを再現する。
 data_rng = random.Random(DATA_SEED)
-observed = true_signal + np.array(
+observed_raw = true_signal + np.array(
     [data_rng.gauss(0.0, NOISE_SIGMA) for _ in range(N)],
     dtype=float,
 )
+observed = np.array([float(f"{value:.12g}") for value in observed_raw])
 
 data_path = DATA_DIR / "synthetic_xps.csv"
 with data_path.open("w", newline="", encoding="utf-8") as file:
     writer = csv.writer(file, lineterminator="\n")
     writer.writerow(["E", "y"])
-    writer.writerows(zip(energy, observed))
+    writer.writerows((f"{E:.12g}", f"{y:.12g}") for E, y in zip(energy, observed))
 
 print(f"wrote: {data_path.relative_to(PROJECT_DIR)}")
 print(f"K_true={K_TRUE}, N={N}, sigma2={SIGMA2}, seed={DATA_SEED}")
